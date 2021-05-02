@@ -306,8 +306,9 @@ const std::vector<std::string> finalVariables = {
 
 
 int main() {
-    const auto nthreads = 4; // set here the number of threads used for the computation
-    ROOT::EnableImplicitMT(nthreads);
+    ROOT::EnableImplicitMT();
+    const auto poolSize = ROOT::GetThreadPoolSize();
+    std::cout << ">>> Thread pool size for parallel processing: " << poolSize << std::endl;
 
     for (const auto &sample : sampleNames) {
         ROOT::RDataFrame df("Events", samplesBasePath + sample + ".root");
