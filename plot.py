@@ -10,9 +10,9 @@ ROOT.gROOT.SetBatch(True)
 
 # Declare a human-readable label for each variable on the plot axis
 variable_labels = {
-        "Higgs_mass": "Invariant mass / GeV",
-        "Z1_mass": "Invariant mass (Z_{1}) / GeV",
-        "Z2_mass": "Invariant mass (Z_{2}) / GeV",
+        "Higgs_mass": "Mass 4 leptons / GeV",
+        "Z1_mass": "Mass Z_{1} / GeV",
+        "Z2_mass": "Mass Z_{2} / GeV",
         }
 
 # Retrieve a histogram from the input file based on the sample, the fina state
