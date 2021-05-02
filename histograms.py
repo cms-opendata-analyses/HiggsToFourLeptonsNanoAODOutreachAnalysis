@@ -17,8 +17,8 @@ ROOT.gROOT.SetBatch(True)
 # the lower edge and the upper edge of the histogram.
 ranges = {
         "Higgs_mass": (36, 70, 180),
-        "Z1_mass": (36, 60, 120),
-        "Z2_mass": (36, 60, 120)
+        "Z1_mass": (36, 40, 160),
+        "Z2_mass": (36, 12, 160)
         }
 
 
