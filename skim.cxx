@@ -57,7 +57,7 @@ std::map<std::string, std::vector<std::string>> samples = {
  * multiplying the integrated luminosity of the data with the cross-section of
  * the process in the datasets divided by the number of simulated events.
  */
-const float integratedLuminosity = 11.467 * 1000.0;
+const float integratedLuminosity = 11.58 * 1000.0;
 const float scaleFactorZZTo4l = 1.386; // Correction of the simulation
 std::map<std::string, float> eventWeights = {
     {"SMHiggsToZZTo4L", 0.0065 / 299973.0 * integratedLuminosity},
@@ -289,7 +289,7 @@ ROOT::RDF::RNode ReconstructHiggs(ROOT::RDF::RNode df, const std::string& finalS
 ROOT::RDF::RNode DeclareVariables(ROOT::RDF::RNode df) {
     return df.Define("Higgs_mass", "Higgs_fourvec.mass()")
              .Define("Z1_mass", "Z_fourvecs[0].mass()")
-             .Define("Z2_mass", "Z_fourvecs[0].mass()");
+             .Define("Z2_mass", "Z_fourvecs[1].mass()");
 }
 
 
