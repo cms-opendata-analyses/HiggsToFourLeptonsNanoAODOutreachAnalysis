@@ -28,7 +28,7 @@ const std::vector<std::string> sampleNames = {
     "ZZTo2e2mu",
     "Run2012B_DoubleMuParked",
     "Run2012C_DoubleMuParked",
-    "Run2012B_DoubleElectron"
+    "Run2012B_DoubleElectron",
     "Run2012C_DoubleElectron"
 };
 
@@ -311,8 +311,8 @@ int main() {
     std::cout << ">>> Thread pool size for parallel processing: " << poolSize << std::endl;
 
     for (const auto &sample : sampleNames) {
+        std::cout << ">>> Process sample " << sample << ":" << std::endl;
         ROOT::RDataFrame df("Events", samplesBasePath + sample + ".root");
-        std::cout << ">>> Process sample " << sample << " with " << *df.Count() << " events:" << std::endl;
 
         for (const auto &finalState : finalStates[sample]) {
             std::cout << ">>> Process final state " << finalState << " for sample " << sample << ":" << std::endl;
