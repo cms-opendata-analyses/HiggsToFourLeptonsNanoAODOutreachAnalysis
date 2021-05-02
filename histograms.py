@@ -15,11 +15,10 @@ ROOT.gROOT.SetBatch(True)
 # Each entry in the dictionary contains of the variable name as key and a tuple
 # specifying the histogram layout as value. The tuple sets the number of bins,
 # the lower edge and the upper edge of the histogram.
-default_nbins = 36
 ranges = {
-        "Higgs_mass": (default_nbins, 70, 180),
-        "Z1_mass": (default_nbins, 40, 120),
-        "Z2_mass": (default_nbins, 12, 120)
+        "Higgs_mass": (36, 70, 180),
+        "Z1_mass": (36, 60, 120),
+        "Z2_mass": (36, 60, 120)
         }
 
 
