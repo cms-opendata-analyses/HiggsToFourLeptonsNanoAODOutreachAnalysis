@@ -1,3 +1,14 @@
+/*
+ * Implementation of the skimming step of the analysis
+ *
+ * The skimming step reduces the inital generic samples to a dataset optimized
+ * for this specific analysis. Most important, the skimming removes all events
+ * from the initial dataset, which are not of interest for our study and reconstructs
+ * Z bosons from combinations of muons and electrons, which may originate from
+ * the decay of a Higgs boson.
+ */
+
+
 #include "ROOT/RDataFrame.hxx"
 #include "ROOT/RVec.hxx"
 
@@ -19,31 +30,17 @@ const std::string samplesBasePath = "./"; // TODO: Set the right paths
 
 
 /*
- * Names of the datasets to be found in the base path and processed for the analysis
- */
-const std::vector<std::string> sampleNames = {
-    "SMHiggsToZZTo4L",
-    "ZZTo4mu",
-    "ZZTo4e",
-    "ZZTo2e2mu",
-    "Run2012B_DoubleMuParked",
-    "Run2012C_DoubleMuParked",
-    "Run2012B_DoubleElectron",
-    "Run2012C_DoubleElectron"
-};
-
-
-/*
- * Final states described by the dataset
+ * Names of the datasets to be found in the base path and processed for the analysis and
+ * the final states described by the dataset
  *
  * The analysis searches the Higgs in the four lepton final state, which can be built
  * from either four muons, four electrons, or two muon and two electrons. Not all simulations
  * cover all final states and therefore we have to distinguish between them in the processing.
  */
-std::map<std::string, std::vector<std::string>> finalStates = {
+std::map<std::string, std::vector<std::string>> samples = {
     {"SMHiggsToZZTo4L", {"FourMuons", "FourElectrons", "TwoMuonsTwoElectrons"}},
     {"ZZTo4mu", {"FourMuons"}},
-    {"ZZTo4el", {"FourElectrons"}},
+    {"ZZTo4e", {"FourElectrons"}},
     {"ZZTo2e2mu", {"TwoMuonsTwoElectrons"}},
     {"Run2012B_DoubleMuParked", {"FourMuons", "TwoMuonsTwoElectrons"}},
     {"Run2012C_DoubleMuParked", {"FourMuons", "TwoMuonsTwoElectrons"}},
@@ -61,8 +58,16 @@ std::map<std::string, std::vector<std::string>> finalStates = {
  * the process in the datasets divided by the number of simulated events.
  */
 const float integratedLuminosity = 11.467 * 1000.0;
+const float scaleFactorZZTo4l = 1.386; // Correction of the simulation
 std::map<std::string, float> eventWeights = {
-    {"SMHiggsToZZTo4L", 0.0065 / 299973.0 * integratedLuminosity}
+    {"SMHiggsToZZTo4L", 0.0065 / 299973.0 * integratedLuminosity},
+    {"ZZTo4mu", 0.077 / 1499064.0 * scaleFactorZZTo4l * integratedLuminosity},
+    {"ZZTo4e", 0.077 / 1499093.0 * scaleFactorZZTo4l * integratedLuminosity},
+    {"ZZTo2e2mu", 0.18 / 1497445.0 * scaleFactorZZTo4l * integratedLuminosity},
+    {"Run2012B_DoubleMuParked", 1.0},
+    {"Run2012C_DoubleMuParked", 1.0},
+    {"Run2012B_DoubleElectron", 1.0},
+    {"Run2012C_DoubleElectron", 1.0}
 };
 
 
@@ -310,23 +315,25 @@ int main() {
     const auto poolSize = ROOT::GetThreadPoolSize();
     std::cout << ">>> Thread pool size for parallel processing: " << poolSize << std::endl;
 
-    for (const auto &sample : sampleNames) {
-        std::cout << ">>> Process sample " << sample << ":" << std::endl;
-        ROOT::RDataFrame df("Events", samplesBasePath + sample + ".root");
+    for (const auto &sample : samples) {
+        const auto name = sample.first;
+        const auto finalStates = sample.second;
+        std::cout << ">>> Process sample " << name << ":" << std::endl;
+        ROOT::RDataFrame df("Events", samplesBasePath + name + ".root");
 
-        for (const auto &finalState : finalStates[sample]) {
-            std::cout << ">>> Process final state " << finalState << " for sample " << sample << ":" << std::endl;
+        for (const auto &finalState : finalStates) {
+            std::cout << ">>> Process final state " << finalState << " for sample " << name << ":" << std::endl;
             TStopwatch time;
             time.Start();
 
             auto df2 = MinimalSelection(df, finalState);
             auto df3 = ReconstructHiggs(df2, finalState);
             auto df4 = DeclareVariables(df3);
-            auto df5 = AddEventWeight(df4, sample);
+            auto df5 = AddEventWeight(df4, name);
 
             auto dfFinal = df5;
             auto report = dfFinal.Report();
-            dfFinal.Snapshot("Events", sample + finalState + "Skim.root", finalVariables);
+            dfFinal.Snapshot("Events", name + finalState + "Skim.root", finalVariables);
             report->Print();
             time.Stop();
             time.Print();
