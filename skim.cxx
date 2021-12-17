@@ -25,7 +25,7 @@
 /*
  * Base path to local filesystem or to EOS containing the datasets
  */
-const std::string samplesBasePath = "root://eospublic.cern.ch//eos/opendata/cms/upload/stefan/HiggsToFourLeptonsNanoAODOutreachAnalysis/";
+const std::string samplesBasePath = "root://eospublic.cern.ch//eos/opendata/cms/derived-data/AOD2NanoAODOutreachTool/ForHiggsTo4Leptons/";
 
 
 /*
