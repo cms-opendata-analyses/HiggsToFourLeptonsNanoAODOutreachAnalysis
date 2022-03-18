@@ -1,0 +1,25 @@
+inputs:
+  files:
+    - skim.cxx
+    - histograms.py
+    - plot.py
+workflow:
+  type: serial
+  specification:
+    steps:
+      - name: compiling
+        environment: rootproject/root:6.24.06-fedora35
+        commands:
+          - g++ -g -O3 -Wall -Wextra -Wpedantic -o skim skim.cxx `root-config --cflags --libs`
+      - name: skimming
+        environment: rootproject/root:6.24.06-fedora35
+        commands:
+          - ./skim
+      - name: histogramming
+        environment: rootproject/root:6.24.06-fedora35
+        commands:
+          - python histograms.py
+      - name: plotting
+        environment: rootproject/root:6.24.06-fedora35
+        commands:
+          - python plot.py

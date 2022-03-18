@@ -1,6 +1,6 @@
 # Analysis of Higgs boson decays to four leptons using data and simulation from the CMS detector
 
-This repository contains an analysis using reduced NanoAOD files created from CMS Open Data studying the decay of a Higgs boson into four leptons. The code produces plots such as shown below which can be used to study the physics in the CMS datasets. You can find a more extensive description of the analysis in the [record on the CERN Open Data portal (TODO: Fix link)](http://opendata.web.cern.ch/record/TODO).
+This repository contains an analysis using reduced NanoAOD files created from CMS Open Data studying the decay of a Higgs boson into four leptons. The code produces plots such as shown below which can be used to study the physics in the CMS datasets. You can find a more extensive description of the analysis in the [record on the CERN Open Data portal](http://opendata.cern.ch/record/12360).
 
 Note that the analysis is not validated and should be used only for educational purposes, in particular since no systematic uncertainties are included.
 
