@@ -1,7 +1,7 @@
 /*
  * Implementation of the skimming step of the analysis
  *
- * The skimming step reduces the inital generic samples to a dataset optimized
+ * The skimming step reduces the initial generic samples to a dataset optimized
  * for this specific analysis. Most important, the skimming removes all events
  * from the initial dataset, which are not of interest for our study and reconstructs
  * Z bosons from combinations of muons and electrons, which may originate from
@@ -17,9 +17,12 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 #include <cmath>
+
 #include <exception>
+#include <stdexcept>
 
 
 /*
@@ -91,7 +94,7 @@ ROOT::RDF::RNode MinimalSelection(ROOT::RDF::RNode df, const std::string& finalS
                          "Two positive and two negative muons");
     } else if (finalState.compare("FourElectrons") == 0) {
         return df.Filter("nElectron>=4",
-                         "At least our electrons")
+                         "At least four electrons")
                  .Filter("All(abs(Electron_pfRelIso03_all)<0.40)",
                          "Require good isolation")
                  .Filter("All(Electron_pt>7) && All(abs(Electron_eta)<2.5)",
@@ -174,7 +177,7 @@ ROOT::RDF::RNode ReconstructHiggs(ROOT::RDF::RNode df, const std::string& finalS
 
         // Find first lepton pair with invariant mass closest to Z mass
         auto idx_cmb = Combinations(pt, 2);
-        auto best_mass = -1;
+        auto best_mass = -1.0;
         size_t best_i1 = 0; size_t best_i2 = 0;
         for (size_t i = 0; i < idx_cmb[0].size(); i++) {
             const auto i1 = idx_cmb[0][i];
